@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="stylesheet" href="/stylesheets/bulma.min.css" />
+
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <style>
+        ::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <h2 class="subtitle is-3 has-text-primary">
+        AeroPi Control Panel
+        <a href="#" onclick='$("#settings").slideToggle()'><img src="/images/gears.png"
+                style="float:right;width:30px; "></a>
+    </h2>
+    <div id="settings">
+        <div class="box">
+            <h2 class="subtitle is-3">Settings</h2>
+            <div class="field">
+                <label class="label">Mist interval (s)</label>
+                <div class="control">
+                    <input class="input" type="number" id="mistingScheduleRunTime"
+                        value="<%= aeroState.mistingScheduleRunTime %>" />
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">Pause interval</label>
+                <div class="control">
+                    <input class="input" type="number" id="mistingSchedulePauseTime"
+                        value="<%= aeroState.mistingSchedulePauseTime %>" />
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">Min pressure</label>
+                <div class="control">
+                    <input class="input" type="number" id="minPressure" value="<%= aeroState.minPressure %>" />
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">Max pressure</label>
+                <div class="control">
+                    <input class="input" type="number" id="maxPressure" value="<%= aeroState.maxPressure %>" />
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">Water level sensor min length (full)</label>
+                <div class="control">
+                    <input class="input" type="number" id="waterFullDistance"
+                        value="<%= aeroState.waterFullDistance %>" />
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">Water level sensor max length (empty)</label>
+                <div class="control">
+                    <input class="input" type="number" id="waterEmptyDistance"
+                        value="<%= aeroState.waterEmptyDistance %>" />
+                </div>
+            </div>
+            <div class="control">
+                <button id="btnUpdateSettings" class="button is-primary">
+                    Update
+                </button>
+            </div>
+        </div>
+
+        <div class="box">
+            <div class="field">
+                <label class="label">Command</label>
+                <div class="control">
+                    <input class="input" type="text" id="txtCommand" />
+                </div>
+            </div>
+            <div class="control">
+                <button id="btnSendCommand" class="button is-primary">
+                    Send
+                </button>
+            </div>
+        </div>
+        <br>
+        <br>
+    </div>
+
+    <div class="tile is-ancestor" id="dashboard">
+        <div class="tile is-vertical ">
+            <div class="tile">
+                <div class="tile is-parent is-vertical">
+                    <article class="tile is-child notification is-success">
+                        <p class="title">
+                            <span id="aero_state">?</span>
+                            <button class="button is-pulled-right" id="aero_state_button" aero-data="1">
+                                ?
+                            </button>
+                        </p>
+                        <p class="subtitle">State</p>
+                        <progress class="progress" id="aero_state_bar" style="display:none;margin-top: -1.25rem;"
+                            value="0" max="100"></progress>
+                    </article>
+                    <article class="tile is-child notification is-info">
+                        <p class="title">
+                            <span id="aero_pump_state">?</span>
+                            <button class="button is-pulled-right aero_toggle" aero-id="SP" aero-data="1">
+                                ?
+                            </button>
+                        </p>
+                        <p class="subtitle">Pressure Pump</p>
+                    </article>
+
+                    <article class="tile is-child notification is-primary">
+                        <p class="title">
+                            <span id="aero_panel_temp"></span> °C
+                        </p>
+                        <p class="subtitle">
+                            <span id="aero_panel_hum">-</span> %
+                        </p>
+                        <p class="subtitle">Control Panel</p>
+                    </article>
+
+                    <article class="tile is-child notification is-primary">
+                        <p class="title">
+                            <span id="aero_water_temp">-</span> °C
+                        </p>
+                        <p class="subtitle">Water Temp</p>
+                    </article>
+                </div>
+            </div>
+        </div>
+        <div class="tile is-vertical">
+            <div class="tile">
+                <div class="tile is-parent is-vertical">
+                    <article class="tile is-child notification is-success">
+                        <p class="title">
+                            <span id="aero_pressure">?</span> bar
+                        </p>
+                        <p class="subtitle">Pressure</p>
+
+                        <progress class="progress" id="aero_pressure_bar" style="display:none;margin-top: -1.25rem;"
+                            value="0" max="<%= aeroState.maxPressure %>"></progress>
+                    </article>
+
+                    <article class="tile is-child notification is-info">
+                        <p class="title">
+                            <span id="aero_misting_state">CLOSED</span>
+                            <button class="button is-pulled-right aero_toggle" aero-id="SM" aero-data="1">
+                                Toggle
+                            </button>
+                        </p>
+                        <p class="subtitle">Misting valve</p>
+                    </article>
+                    <article class="tile is-child notification is-primary">
+                        <p class="title">
+                            <span id="aero_pump_temp"></span> °C
+                        </p>
+                        <p class="subtitle">
+                            <span id="aero_pump_hum">-</span> %
+                        </p>
+                        <p class="subtitle">Pump</p>
+                    </article>
+                </div>
+            </div>
+        </div>
+        <div class="tile is-vertical">
+            <div class="tile">
+                <div class="tile is-parent is-vertical">
+                    <article class="tile is-child notification is-success">
+                        <p class="title">
+                            <span id="aero_water_level">?</span> %
+                        </p>
+                        <p class="subtitle">Water level</p>
+                        <!--<progress class="progress" value="0" max="100">15%</progress>-->
+                    </article>
+
+                    <article class="tile is-child notification is-info">
+                        <p class="title">
+                            <span id="aero_bypass_state">CLOSED</span>
+                            <button class="button is-pulled-right aero_toggle" aero-id="SB" aero-data="1">
+                                Toggle
+                            </button>
+                        </p>
+                        <p class="subtitle">Bypass valve</p>
+                    </article>
+
+                    <article class="tile is-child notification is-primary">
+                        <p class="title">
+                            <span id="aero_room_temp"></span> °C
+                        </p>
+                        <p class="subtitle">
+                            <span id="aero_room_hum">-</span> %
+                        </p>
+                        <p class="subtitle">Room</p>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        var ws_url =
+            "<%= aeroState.socketUrl %>:<%= aeroState.socketPort %>";
+        var ws_port = <%= aeroState.socketPort %>;
+        var aero_state = 0;
+        var maxPressure = <%= aeroState.maxPressure %>;
+        var minPressure = <%= aeroState.minPressure %>;
+        var waterEmptyDistance = <%= aeroState.waterEmptyDistance %>;
+        var waterFullDistance = <%= aeroState.waterFullDistance %>;
+        var mistingScheduleRunTime = <%= aeroState.mistingScheduleRunTime %>;
+        var mistingSchedulePauseTime = <%= aeroState.mistingSchedulePauseTime %>;
+    </script>
+    <script src="/javascripts/jquery-3.4.1.min.js"></script>
+    <script src="/javascripts/wss.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $("#settings").slideUp();
+        });
+    </script>
+</body>
+
+</html>

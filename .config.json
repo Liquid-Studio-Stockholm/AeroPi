@@ -1,0 +1,18 @@
+{
+    "arduinoAvailable": true,
+    "mockArduino": false,
+    "platform": "macos",
+    "port": 8080,
+    "autoStartSensor": true,
+    "socketUrl": "ws://aeropi",
+    "socketPort": 3005,
+    "arduinoPath1": "/dev/ttyUSB0",
+    "arduinoPath2": "/dev/ttyUSB1",
+    "maxPressure": 7,
+    "minPressure": 6,
+    "waterEmptyDistance": 24,
+    "waterFullDistance": 5,
+    "arduinoSimulation": 1,
+    "mistingScheduleRunTime": 30,
+    "mistingSchedulePauseTime": 300
+}

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+</head>
+<style>
+    html,
+    body {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        overflow: hidden;
+    }
+
+    body {
+        overflow: hidden;
+    }
+
+    iframe {
+        box-sizing: border-box;
+        overflow: auto;
+
+
+    }
+
+
+
+    ::-webkit-scrollbar {
+        display: none;
+    }
+
+    #left_frame,
+    #right_frame {
+        float: left;
+        border: none;
+        width: 50%;
+        height: 100%
+    }
+
+    #right_frame {
+        border-left: 1px solid grey
+    }
+</style>
+
+<body>
+    <iframe id="left_frame" src="https://hydroponics-65dc5.web.app"></iframe>
+    <iframe id="right_frame"></iframe>
+</body>
+
+<script>
+    document.getElementById("right_frame").src = "http://" + window.location.hostname + ":8080";
+</script>
+
+</html>
